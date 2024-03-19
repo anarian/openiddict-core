@@ -140,4 +140,4 @@ jobs:
         nuget-version: '5.11.0'
 
     - name: Push packages to NuGet.org
-      run: nuget push "*.nupkg" -ApiKey ${{ secrets.NUGET_API_KEY }} -SkipDuplicate -Source https://nuget.pkg.github.com/anarian/index.json
+      run: nuget push "*.nupkg" -ApiKey ${{ secrets.PUSH_TOKEN }} -SkipDuplicate -Source https://nuget.pkg.github.com/anarian/index.json
