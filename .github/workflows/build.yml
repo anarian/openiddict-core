@@ -107,7 +107,7 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.202'
-        source-url: https://nuget.pkg.github.com/anarian/index.json
+        source-url: https://nuget.pkg.github.com/myblueprint-spaces/index.json
 
     - name: Validate NuGet packages
       shell: pwsh
@@ -133,7 +133,7 @@ jobs:
       packages: write
     env:
       NUGET_AUTH_TOKEN: ${{ github.token }}
-    if: github.event.repository.fork == false && startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
     - name: Download packages
       uses: actions/download-artifact@v3
@@ -146,4 +146,4 @@ jobs:
         nuget-version: '5.11.0'
 
     - name: Push packages to NuGet.org
-      run: nuget push "*.nupkg" -ApiKey ${{ secrets.PUSH_TOKEN }} -SkipDuplicate -Source https://nuget.pkg.github.com/anarian/index.json
+      run: nuget push "*.nupkg" -ApiKey ${{ secrets.PUSH_TOKEN }} -SkipDuplicate -Source https://nuget.pkg.github.com/myblueprint-spaces/index.json
