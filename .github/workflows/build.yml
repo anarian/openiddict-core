@@ -106,6 +106,7 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.202'
+        source-url: https://nuget.pkg.github.com/anarian/index.json
 
     - name: Validate NuGet packages
       shell: pwsh
@@ -123,26 +124,6 @@ jobs:
           Write-Output "::error::$invalidPackages NuGet package(s) failed validation."
         }
 
-  push-packages-myget:
-    needs: validate-packages
-    runs-on: ubuntu-latest
-    if: |
-      github.event.repository.fork == false &&
-      (github.ref == 'refs/heads/dev' || startsWith(github.ref, 'refs/heads/rel/') || startsWith(github.ref, 'refs/tags/'))
-    steps:
-    - name: Download packages
-      uses: actions/download-artifact@v3
-      with:
-        name: packages-windows
-
-    - name: Setup NuGet
-      uses: nuget/setup-nuget@v1
-      with:
-        nuget-version: '5.11.0'
-
-    - name: Push packages to MyGet.org
-      run: nuget push "*.nupkg" -ApiKey ${{ secrets.MYGET_API_KEY }} -SkipDuplicate -Source https://www.myget.org/F/openiddict/api/v3/index.json
-
   push-packages-nuget:
     needs: validate-packages
     runs-on: ubuntu-latest
@@ -159,4 +140,4 @@ jobs:
         nuget-version: '5.11.0'
 
     - name: Push packages to NuGet.org
-      run: nuget push "*.nupkg" -ApiKey ${{ secrets.NUGET_API_KEY }} -SkipDuplicate -Source https://api.nuget.org/v3/index.json
+      run: nuget push "*.nupkg" -ApiKey ${{ secrets.NUGET_API_KEY }} -SkipDuplicate -Source https://nuget.pkg.github.com/anarian/index.json
